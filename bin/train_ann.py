@@ -45,12 +45,12 @@ for n in range(n_functions + 1):
     dn=dn.reset_index(drop=True)
     
     #Train NN
+    #Train on the  first points
     xtrain = dn.loc[0:train_size-1]['x1']
     ytrain = dn.loc[0:train_size-1]['y']
 
     net=pyrenn.train_LM(xtrain,ytrain,nn,verbose=True,k_max=100,E_stop=1e-5)
-#    print(type(net['w']))
-#    d_weights['w' + str(n)]=net['w']
+
     
     #Save neural network
     pyrenn.saveNN(net,'../Data/'+ 'NN_weights_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')

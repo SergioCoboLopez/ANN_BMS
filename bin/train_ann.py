@@ -11,9 +11,16 @@ import matplotlib.gridspec as gridspec
 
 #Read data
 #-----------------------------------------------------
-activation_function='tanh'
-filename='NN_function_' + activation_function + '_NREP_10_data.csv'
-data='../Data/' + filename
+noise=True
+activation_function='leaky_ReLU'
+
+
+if noise==True:
+    filename='NN_noisy_signal_' + activation_function + '.csv'
+else:
+    filename='NN_function_' + activation_function + '_NREP_10_data.csv'
+
+data='../data/' + filename
 
 d=pd.read_csv(data)
 d=d.drop(columns='Unnamed: 0')
@@ -22,7 +29,6 @@ print(d)
 d=d[(d['x1'] >= -2.0) & (d['x1']<=2.0)]
 d=d.reset_index(drop=True)
 #-----------------------------------------------------
-
 
 #Build ANN
 ILS = 1;OLS=1
@@ -47,13 +53,17 @@ for n in range(n_functions + 1):
     #Train NN
     #Train on the  first points
     xtrain = dn.loc[0:train_size-1]['x1']
-    ytrain = dn.loc[0:train_size-1]['y']
+    ytrain = dn.loc[0:train_size-1]['y_noise']
 
     net=pyrenn.train_LM(xtrain,ytrain,nn,verbose=True,k_max=100,E_stop=1e-5)
 
     
     #Save neural network
-    pyrenn.saveNN(net,'../Data/'+ 'NN_weights_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
+    if noise==True:
+            pyrenn.saveNN(net,'../data/'+ 'NN_weights_noise_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
+
+    else:
+            pyrenn.saveNN(net,'../data/'+ 'NN_weights_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
     
     #Test NN
     xtest = dn.loc[train_size:]['x1']
@@ -68,12 +78,14 @@ for n in range(n_functions + 1):
         ymodel=ymodel_n
 
 
-
-
 #Add predictions and save data
 d['ymodel']=ymodel
-d.to_csv('../Data/'+ 'NN_predictions_' + activation_function +  '_train_' + str(train_size) + \
+if noise==True:
+    d.to_csv('../data/'+ 'NN_model_noise_' + activation_function +  '_train_' + str(train_size) + '_NREP_10_data' + '.csv')
+else:
+    d.to_csv('../data/'+ 'NN_model_' + activation_function +  '_train_' + str(train_size) + \
          '_NREP_10_data' + '.csv')
+
 
 
 

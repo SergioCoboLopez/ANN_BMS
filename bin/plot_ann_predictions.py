@@ -11,25 +11,38 @@ import seaborn as sns
 import matplotlib.gridspec as gridspec
 
 #Read data
-activation_function='tanh'
+activation_function='leaky_ReLU'
 train_size=60
+noise=True
 
 #Model predictions
-file_model='NN_model_' + activation_function + '_train_' +str(train_size)+ '_NREP_10_data' + '.csv'
+if noise==True:
+    file_model='NN_model_noise_' + activation_function + '_train_' +str(train_size)+ '_NREP_10_data' + '.csv'
+else:
+    file_model='NN_model_' + activation_function + '_train_' +str(train_size)+ '_NREP_10_data' + '.csv'
+
+    
 model_d='../data/' + file_model
 d=pd.read_csv(model_d)
 
-files_weights= 'NN_weights_' + activation_function +  '_train_' +str(train_size) + '_rep_'
+if noise==True:
+    files_weights= 'NN_weights_noise_' + activation_function + '_train_' +str(train_size) + '_rep_'
+else:
+    files_weights= 'NN_weights_' + activation_function + '_train_' +str(train_size) + '_rep_'
+    
 model_w='../data/' + files_weights
-
 
 
 #Figure settings                                                                          
 #===================================================================            
 #Path to save figure                                                      
 Output_Path='../results/Figures/'
-Name_figure='results' + activation_function
 
+if noise==True:
+    Name_figure='results_noise_' + activation_function
+else:
+    Name_figure='results' + activation_function
+    
 #Extensions                              
 Extensions=['.png','.pdf']
 
@@ -93,6 +106,7 @@ for row in range(rows):
     ax_row_0=plt.subplot(gs[row,0])
 
     plt.plot(dn['x1'], dn['y'],label='observed')
+    plt.plot(dn['x1'], dn['y_noise'],label='observed')
     plt.plot(dn.loc[:train_size-1]['x1'], dn.loc[:train_size-1]['ymodel'],color='red',linestyle='--',label='NN model train')
     plt.plot(dn[train_size:]['x1'], dn.loc[train_size:]['ymodel'],color='orange',linestyle='--',label='NN model test')
     plt.axvline(x=train_border,linestyle='--',linewidth=line_w, color='k')
@@ -149,3 +163,43 @@ for row in range(rows):
         plt.savefig(Output_Path+Name_figure+'_test' +ext,dpi=300)
 
 plt.show()
+
+
+#single figure
+#--------------------------------------------------------
+
+#Figure settings                                                     
+#--------------------------------                                    
+output_path='figures/'
+name_fig='example_fig'
+extensions=['.svg','.png','.pdf']     #Extensions to save figure     
+
+#Define figure size                                                  
+cm = 1/2.54 #convert inch to cm                                      
+width = 8*cm; height=4*cm #8x4cm for each figure in panel
+
+#Fonts and sizes                                                     
+size_axis=7;size_ticks=6;size_title=5
+line_w=1;marker_s=3
+#--------------------------------
+n=3;
+dn=d[d['rep']==n]
+
+dn.set_index('Unnamed: 0', inplace=True)
+dn.index.name = None
+dn=dn.reset_index(drop=True)
+
+plt.plot(dn.x1,dn.y,'.', color='blue', label='observed')
+plt.plot(dn.x1,dn.y_noise, color='orange', label='noisy')
+plt.plot(dn.x1,dn.ymodel, color='red', label='nn')
+
+plt.title('n= %d ,  %s'  %(n, activation_function)) 
+plt.xlabel('x',fontsize=size_axis);plt.ylabel('y',fontsize=size_axis)
+plt.xlim(-2,2);plt.ylim(-0.1,1.1)
+plt.legend(loc='best')
+
+Name_figure='nn_noisy_prediction_' + activation_function + '_' + str(n)
+plt.savefig('../results/' + Name_figure + '.png',dpi=300)
+
+plt.show()
+#--------------------------------------------------------

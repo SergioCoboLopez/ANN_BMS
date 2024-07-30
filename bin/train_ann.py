@@ -55,6 +55,7 @@ for n in range(n_functions + 1):
     xtrain = dn.loc[0:train_size-1]['x1']
     ytrain = dn.loc[0:train_size-1]['y_noise']
 
+
     net=pyrenn.train_LM(xtrain,ytrain,nn,verbose=True,k_max=100,E_stop=1e-5)
 
     

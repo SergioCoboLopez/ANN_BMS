@@ -48,10 +48,8 @@ nn=pyrenn.CreateNN(arch)
 train_size=50
 validation_size=train_size + 10
 n_functions=int(d['rep'].max())
-#~~~~~~~~~~~~~~~
-n_functions=0
 print(n_functions)
-#~~~~~~~~~~~~~~~
+
 
 for n in range(n_functions + 1):    
     #Read data
@@ -69,17 +67,13 @@ for n in range(n_functions + 1):
     yvalid=dn.loc[train_size:validation_size-1]['y_noise']
 
     #Error and neural network vectors
-    MAE=[];MSE=[]; RMSE=[]
-    MAE_t=[];MSE_t=[]; RMSE_t=[]
-    nn_dict={}
-#    nn_test={}
+    MAE=[];MSE=[];RMSE=[]        #Lists of validation errors
+    MAE_t=[];MSE_t=[]; RMSE_t=[] #List of training errors
+    nn_dict={} #Dictionary of neural network models
+
     for i in range(30):
         #Two iterations of training a neural network (k_max=1)
         net=pyrenn.train_LM(xtrain,ytrain,nn,verbose=True,k_max=1,E_stop=1e-200)
-
-#        nn_test[i]=net['w'][0]
-#        print(net['w'][0])
-
         
         #Test NN on validation set
         yvalid_test = pyrenn.NNOut(xtrain,net) #Prediction on training test
@@ -87,9 +81,6 @@ for n in range(n_functions + 1):
 
         #Validation errors
         #--------------------------------------------------
-        # MAE_i=mean_absolute_error(yvalid,yvalid_pred)
-        # MAE.append(MAE_i)
-
         MSE_i=mean_squared_error(yvalid,yvalid_pred)
         MSE.append(MSE_i)
 
@@ -99,9 +90,6 @@ for n in range(n_functions + 1):
 
         #Training errors
         #--------------------------------------------------
-        # MAE_t_i=mean_absolute_error(ytrain,yvalid_test)
-        # MAE_t.append(MAE_t_i)
-        
         MSE_t_i=mean_squared_error(ytrain,yvalid_test)
         MSE_t.append(MSE_t_i)
 
@@ -121,19 +109,20 @@ for n in range(n_functions + 1):
         # print("\n")
 
         
-    #print(MAE);min_error_mae=min(MAE);
+    #Find the model with the minimum error
     min_error_mse=min(MSE);min_error_rmse=min(RMSE)
     print(min_error_mse,min_error_rmse)
-    #min_err_mae_ind=MAE.index(min_error_mae);
+
+    #Take indices of the elements with minimum error
     min_err_mse_ind=MSE.index(min_error_mse);min_err_rmse_ind=RMSE.index(min_error_rmse)
     print(min_err_mse_ind, min_err_rmse_ind)
 
     #--------------------------------------------------------
-    plt.plot(MAE, '.', color='blue', label='MAE validation')
+#    plt.plot(MAE, '.', color='blue', label='MAE validation')
     plt.plot(MSE, '.', color='red',label='MSE validation')
     plt.plot(RMSE,'.', color='green',label='RMSE validation')
 
-    plt.plot(MAE_t, linewidth=1,linestyle='--',color='blue',label='MAE train')
+#    plt.plot(MAE_t, linewidth=1,linestyle='--',color='blue',label='MAE train')
     plt.plot(MSE_t, linewidth=1,linestyle='--',color='red',label='MSE train')
     plt.plot(RMSE_t,linewidth=1,linestyle='--',color='green',label='RMSE train')
     plt.legend(loc='best')
@@ -147,7 +136,7 @@ for n in range(n_functions + 1):
     else:
             pyrenn.saveNN(net,'../data/'+ 'NN_weights_TEST_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
     
-    #Test NN
+    #First NN found
     net_first=nn_dict[0]
     xtest = dn.loc[train_size:]['x1']
     ytest_first = pyrenn.NNOut(xtrain,net_first)
@@ -156,7 +145,7 @@ for n in range(n_functions + 1):
     #save results
     ymodel_n=np.concatenate((ytest_first, ypred_first))
 
-    
+    #Last NN found
     net_last=nn_dict[9]
     print(net_last['w'][0])
     xtest = dn.loc[train_size:]['x1']
@@ -166,13 +155,20 @@ for n in range(n_functions + 1):
     #save results
     ymodel_last=np.concatenate((ytest_last, ypred_last))
 
-
+    #Best nn found
+    #------------------------------------------------------
     net_best=nn_dict[min_err_mse_ind]
     print(net_best['w'][0])
     ytest_best = pyrenn.NNOut(xtrain,net_best)
     ypred_best = pyrenn.NNOut(xtest,net_best)
     ymodel_best=np.concatenate((ytest_best, ypred_best))
+    #------------------------------------------------------
 
+    #Save neural network
+    if noise==True:
+            pyrenn.saveNN(net_best,'../data/'+ 'NN_weights_no_overfit_noise_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
+    else:
+            pyrenn.saveNN(net_best,'../data/'+ 'NN_weights_no_overfit_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
     
     xplot=np.concatenate((xtrain,xtest))
     plt.plot(xplot,ymodel_n,'k', label='first model')
@@ -192,9 +188,9 @@ for n in range(n_functions + 1):
 #Add predictions and save data
 d['ymodel']=ymodel
 if noise==True:
-    d.to_csv('../data/'+ 'NN_model_TEST_noise_' + activation_function +  '_train_' + str(train_size) + '_NREP_10_data' + '.csv')
+    d.to_csv('../data/'+ 'NN_model_best_noise_no_overfit_' + activation_function +  '_train_' + str(train_size) + '_NREP_10_data' + '.csv')
 else:
-    d.to_csv('../data/'+ 'NN_model_TEST_' + activation_function +  '_train_' + str(train_size) + \
+    d.to_csv('../data/'+ 'NN_model_no_overfit_' + activation_function +  '_train_' + str(train_size) + \
          '_NREP_10_data' + '.csv')
 
 

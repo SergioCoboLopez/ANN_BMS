@@ -32,9 +32,11 @@ data='../data/' + filename
 d=pd.read_csv(data)
 d=d.drop(columns='Unnamed: 0')
 
-#print(d)
+#Take subset of data
 d=d[(d['x1'] >= -2.0) & (d['x1']<=2.0)]
 d=d.reset_index(drop=True)
+
+#Take nth dataset
 print(d[d['rep']==0])
 #-----------------------------------------------------
 
@@ -47,11 +49,19 @@ nn=pyrenn.CreateNN(arch)
 #Train
 train_size=50
 validation_size=train_size + 10
-n_functions=int(d['rep'].max())
+
+train_border=d[d['rep']==0].loc[train_size-1]['x1']
+valid_border=d[d['rep']==0].loc[validation_size-1]['x1']
+
+
+n_functions=int(d['rep'].max()) #Number of functions in dataset
 print(n_functions)
 
 
-for n in range(n_functions + 1):    
+for n in range(n_functions + 1):
+
+
+    
     #Read data
     dn=d[d['rep']==n]
     dn.index.name = None
@@ -118,15 +128,28 @@ for n in range(n_functions + 1):
     print(min_err_mse_ind, min_err_rmse_ind)
 
     #--------------------------------------------------------
+
+    #Define figure size
+    cm = 1/2.54 #convert inch to cm                                  
+    width = 8*cm; height=4*cm #8x4cm for each figure in panel
+
+    #Fonts and sizes
+    size_axis=7;size_ticks=6;size_title=5
+    line_w=1;marker_s=3
+    #--------------------------------
 #    plt.plot(MAE, '.', color='blue', label='MAE validation')
-    plt.plot(MSE, '.', color='red',label='MSE validation')
-    plt.plot(RMSE,'.', color='green',label='RMSE validation')
+    plt.plot(MSE, '.', markersize=8, color='red',label='MSE validation')
+    plt.plot(RMSE,'.', markersize=8, color='green',label='RMSE validation')
 
 #    plt.plot(MAE_t, linewidth=1,linestyle='--',color='blue',label='MAE train')
     plt.plot(MSE_t, linewidth=1,linestyle='--',color='red',label='MSE train')
     plt.plot(RMSE_t,linewidth=1,linestyle='--',color='green',label='RMSE train')
+    plt.scatter(min_err_rmse_ind ,min_error_rmse, s=80,marker='*',color='blue', label='minimum rmse')
     plt.legend(loc='best')
     #--------------------------------------------------------
+
+    #Labels
+    plt.xlabel('iterations',fontsize=size_axis);plt.ylabel('error',fontsize=size_axis)
     plt.show()
 
     
@@ -157,7 +180,7 @@ for n in range(n_functions + 1):
 
     #Best nn found
     #------------------------------------------------------
-    net_best=nn_dict[min_err_mse_ind]
+    net_best=nn_dict[min_err_rmse_ind]
     print(net_best['w'][0])
     ytest_best = pyrenn.NNOut(xtrain,net_best)
     ypred_best = pyrenn.NNOut(xtest,net_best)
@@ -171,12 +194,39 @@ for n in range(n_functions + 1):
             pyrenn.saveNN(net_best,'../data/'+ 'NN_weights_no_overfit_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
     
     xplot=np.concatenate((xtrain,xtest))
-    plt.plot(xplot,ymodel_n,'k', label='first model')
-    plt.plot(xplot,ymodel_last,'r', label='last model')
-    plt.plot(xplot,ymodel_best,'green',label='best model') 
+
+    #Figure settings                                                 
+    #--------------------------------
+    output_path='figures/'
+    name_fig='example_fig'
+    extensions=['.svg','.png','.pdf']   #Extensions to save figure   
+
+    #Define figure size
+    cm = 1/2.54 #convert inch to cm
+    width = 8*cm; height=4*cm #8x4cm for each figure in panel
+
+    #Fonts and sizes
+    size_axis=7;size_ticks=6;size_title=5
+    line_w=1;marker_s=3
+    #--------------------------------
+
+    fig=figure(figsize=(width,height), dpi=300)
+
+    plt.axvline(x=train_border,linestyle='--',linewidth=line_w, color='k')
+    plt.axvline(x=valid_border,linestyle='--',linewidth=line_w, color='k')
+    
+    plt.plot(xplot,ymodel_n,'k', label='first nn model')
+    plt.plot(xplot,ymodel_last,'r', label='last nn model')
+    plt.plot(xplot,ymodel_best,'green',label='best nn model') 
     plt.plot(xplot,dn.y_noise, 'orange', label='noise')
-    plt.plot(xplot,dn.y, 'blue', label='original')
-    plt.legend(loc='best')
+    plt.plot(xplot,dn.y, '.', color= 'blue', label='original')
+    #plt.legend(loc='best')
+
+    #plt.title('n=%d, id=%d : $%s$' % (n, runid, t.latex()),fontsize=size_title)
+    plt.xlabel('x',fontsize=size_axis);plt.ylabel('y',fontsize=size_axis)
+    plt.xticks(fontsize=size_ticks);plt.yticks(fontsize=size_ticks)
+    plt.legend(loc='best', fontsize=size_ticks)
+
     plt.show()
 
     try:

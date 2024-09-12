@@ -23,9 +23,15 @@ from sklearn.metrics import mean_absolute_error
 
 #Read data
 #-----------------------------------------------------
-function='leaky_ReLU'
-sigma=0.06
-filename='NN_' + function + '_sigma_' + str(sigma) + '.csv'
+function='tanh'
+sigma=0.2
+realization=0
+
+
+#filename='NN_' + function + '_sigma_' + str(sigma) + '.csv'
+
+filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '.csv'
+    
 data='../data/' + filename
 
 d=pd.read_csv(data)
@@ -128,7 +134,9 @@ for n in range(n_functions + 1):
     #Figure settings
     #--------------------------------
     output_path='../results/nn_w_validation/'
-    name_fig='validation_errors_' + 'sigma_' + str(sigma) + '_' + str(function) + '_' + str(n)
+
+    
+    name_fig='validation_errors_' + 'sigma_' + str(sigma) + '_' + str(function) + '_' + str(n) + '_r_' + str(realization)
     extensions=['.png']   #Extensions to save figure   
     
     #Define figure size
@@ -183,9 +191,7 @@ for n in range(n_functions + 1):
     #------------------------------------------------------
 
     #Save neural network
-#    pyrenn.saveNN(net_best,'../data/'+ 'NN_weights_noise_no_overfit_' + function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
-
-    pyrenn.saveNN(net_best, '../data/' + 'NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) + '_rep_' + str(n) + '.csv')
+    pyrenn.saveNN(net_best, '../data/' + 'NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) + '_rep_' + str(n) + '_r_' + str(realization) + '.csv')
 
     
 
@@ -193,7 +199,7 @@ for n in range(n_functions + 1):
 
     #Figure settings                                                 
     #--------------------------------
-    name_fig='no_overfit_prediction'+ '_sigma_' + str(sigma) + '_' + str(function) + '_' + str(n)
+    name_fig='no_overfit_prediction'+ '_sigma_' + str(sigma) + '_' + str(function) + '_' + str(n) + '_r_' + str(realization)
 
     #Define figure size
     cm = 1/2.54 #convert inch to cm
@@ -234,7 +240,9 @@ for n in range(n_functions + 1):
 d['ymodel']=ymodel
 
 #Save updated data with model
-d.to_csv('../data/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '.csv')
+
+
+d.to_csv('../data/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '.csv')
 
 
 

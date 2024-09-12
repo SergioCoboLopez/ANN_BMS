@@ -36,7 +36,8 @@ model_w='../data/' + files_weights
 #Figure settings                                                                          
 #===================================================================            
 #Path to save figure                                                      
-Output_Path='../results/Figures/'
+#Output_Path='../results/Figures/'
+Output_Path='../results/'
 
 if noise==True:
     Name_figure='results_noise_' + activation_function

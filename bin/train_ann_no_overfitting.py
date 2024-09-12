@@ -1,6 +1,11 @@
-# Train neural networks with pyrenn to predict ANN-generated functions without overfitting.
-# In this code, I split the training set in training (50 points) and validation (10 points).
-# I do two iterations
+#10/9/2024
+# This code trains neural networks in input data without overfitting.
+# The train set is split in another training set (50 points) and a validation set (10 points). The number of points may change in future versions of this code.
+# The training is done in sets of two epochs and there are n iterations of these sets. After each set, the errors (MAE and RMSE) are evaluated.
+#The code saves the best neural network. Best, being the neural network with the minimum RMSE on the validation set, meaining that there is no overfitting.
+#The code plots the errors (RMSE and MAE) as a function of the iterations. It also plots the first nn, the last nn, and the best nn together with the original signal and the signal with noise.
+#In this version, MAE is purely informative and the best model is based on the minimum RMSE.
+
 import pyrenn
 import numpy as np
 import copy
@@ -18,26 +23,19 @@ from sklearn.metrics import mean_absolute_error
 
 #Read data
 #-----------------------------------------------------
-noise=True
-activation_function='tanh'
-
-
-if noise==True:
-    filename='NN_noisy_signal_'+activation_function + '.csv'
-else:
-    filename='NN_function_'+activation_function + '_NREP_10_data.csv'
-
+function='leaky_ReLU'
+sigma=0.06
+filename='NN_' + function + '_sigma_' + str(sigma) + '.csv'
 data='../data/' + filename
 
 d=pd.read_csv(data)
 d=d.drop(columns='Unnamed: 0')
-
 #Take subset of data
 d=d[(d['x1'] >= -2.0) & (d['x1']<=2.0)]
 d=d.reset_index(drop=True)
 
 #Take nth dataset
-print(d[d['rep']==0])
+#print(d[d['rep']==0])
 #-----------------------------------------------------
 
 #Build ANN
@@ -51,7 +49,8 @@ train_size=50;validation_size=train_size + 10
 train_border=d[d['rep']==0].loc[train_size-1]['x1']
 valid_border=d[d['rep']==0].loc[validation_size-1]['x1']
 n_functions=int(d['rep'].max()) #Number of functions in dataset
-iterations=200
+iterations=300
+
 
 
 for n in range(n_functions + 1):
@@ -88,6 +87,9 @@ for n in range(n_functions + 1):
         MSE_i=mean_squared_error(yvalid,yvalid_pred)
         MSE.append(MSE_i)
 
+        MAE_i=mean_absolute_error(yvalid,yvalid_pred)
+        MAE.append(MAE_i)
+
         RMSE_i=root_mean_squared_error(yvalid,yvalid_pred)
         RMSE.append(RMSE_i)
         #--------------------------------------------------
@@ -97,6 +99,9 @@ for n in range(n_functions + 1):
         MSE_t_i=mean_squared_error(ytrain,yvalid_test)
         MSE_t.append(MSE_t_i)
 
+        MAE_t_i=mean_absolute_error(ytrain,yvalid_test)
+        MAE_t.append(MAE_t_i)
+        
         RMSE_t_i=root_mean_squared_error(ytrain,yvalid_test)
         RMSE_t.append(RMSE_t_i)
         #--------------------------------------------------
@@ -122,8 +127,8 @@ for n in range(n_functions + 1):
 
     #Figure settings
     #--------------------------------
-    output_path='../results/'
-    name_fig='validation_errors_' + str(activation_function) + '_' + str(n)
+    output_path='../results/nn_w_validation/'
+    name_fig='validation_errors_' + 'sigma_' + str(sigma) + '_' + str(function) + '_' + str(n)
     extensions=['.png']   #Extensions to save figure   
     
     #Define figure size
@@ -135,31 +140,23 @@ for n in range(n_functions + 1):
     size_axis=7;size_ticks=6;size_title=5
     line_w=1;marker_s=3
     #--------------------------------
-    
-#    plt.plot(MAE, '.', color='blue', label='MAE validation')
-    plt.plot(MSE,'.',markersize=8,color='red',label='MSE validation')
-    plt.plot(RMSE,'.',markersize=8,color='green',label='RMSE validation')
+    plt.plot(MAE, '.', markersize=6, color='blue', label='MAE validation')
+#    plt.plot(MSE,'.',markersize=8,color='red',label='MSE validation')
+    plt.plot(RMSE,'.',markersize=6,color='green',label='RMSE validation')
 
-#    plt.plot(MAE_t, linewidth=1,linestyle='--',color='blue',label='MAE train')
-    plt.plot(MSE_t,linewidth=1,linestyle='--',color='r',label='MSE train')
-    plt.plot(RMSE_t,linewidth=1,linestyle='--',color='g',label='RMSE train')
-    plt.scatter(min_err_rmse_ind,min_error_rmse,s=80,marker='*',color='blue',label='minimum rmse')
+    plt.plot(MAE_t, linewidth=1,linestyle='--',color='blue',label='MAE train')
+#    plt.plot(MSE_t,linewidth=1,linestyle='--',color='r',label='MSE train')
+    plt.plot(RMSE_t,linewidth=1,linestyle='--',color='green',label='RMSE train')
+    plt.scatter(min_err_rmse_ind,min_error_rmse,s=80,marker='*',color='red',label='minimum rmse')
     #--------------------------------------------------------
 
     #Labels
     plt.legend(loc='best', fontsize=size_ticks)
     plt.xlabel('iterations',fontsize=size_axis);plt.ylabel('error',fontsize=size_axis)
-    plt.title('%s, n=%d' % (activation_function, n),fontsize=size_title)
+    plt.title('%s, n=%d' % (function, n),fontsize=size_title)
     ext=extensions[0]
     plt.savefig(output_path+name_fig+ext,dpi=300)
     plt.show()
-
-    
-    # #Save neural network
-    # if noise==True:
-    #         pyrenn.saveNN(net,'../data/'+ 'NN_weights_TEST_noise_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
-    # else:
-    #         pyrenn.saveNN(net,'../data/'+ 'NN_weights_TEST_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
     
     #First NN found
     net_first=nn_dict[0]
@@ -186,17 +183,17 @@ for n in range(n_functions + 1):
     #------------------------------------------------------
 
     #Save neural network
-    if noise==True:
-            pyrenn.saveNN(net_best,'../data/'+ 'NN_weights_noise_no_overfit_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
-    else:
-            pyrenn.saveNN(net_best,'../data/'+ 'NN_weights_no_overfit_' + activation_function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
+#    pyrenn.saveNN(net_best,'../data/'+ 'NN_weights_noise_no_overfit_' + function + '_train_' + str(train_size) + '_rep_' + str(n) + '.csv')
+
+    pyrenn.saveNN(net_best, '../data/' + 'NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) + '_rep_' + str(n) + '.csv')
+
     
+
     xplot=np.concatenate((xtrain,xtest))
 
     #Figure settings                                                 
     #--------------------------------
-    output_path='../results/'
-    name_fig='no_overfit_noise_prediction'+ str(activation_function) + '_' + str(n)
+    name_fig='no_overfit_prediction'+ '_sigma_' + str(sigma) + '_' + str(function) + '_' + str(n)
 
     #Define figure size
     cm = 1/2.54 #convert inch to cm
@@ -219,28 +216,25 @@ for n in range(n_functions + 1):
     plt.plot(xplot,dn.y, '.', color= 'blue', label='original')
 
 
-    plt.title('%s, n=%d' % (activation_function, n),fontsize=size_title)
+    plt.title('%s, n=%d' % (function, n),fontsize=size_title)
     plt.xlabel('x',fontsize=size_axis);plt.ylabel('y',fontsize=size_axis)
     plt.xticks(fontsize=size_ticks);plt.yticks(fontsize=size_ticks)
+    plt.xlim(-2,2);plt.ylim(-0.1,1.1)
     plt.legend(loc='best', fontsize=size_ticks)
     plt.savefig(output_path+name_fig+ext,dpi=300)
     plt.show()
 
     try:
-        ymodel=np.append(ymodel,ymodel_n)
+        ymodel=np.append(ymodel,ymodel_best)
     except NameError:
-        ymodel=ymodel_n
+        ymodel=ymodel_best
 
 
 #Add predictions to data
 d['ymodel']=ymodel
 
 #Save updated data with model
-if noise==True:
-    d.to_csv('../data/'+ 'NN_best_model_noise_no_overfit_' + activation_function +  '_train_' + str(train_size) + '_NREP_10_data' + '.csv')
-else:
-    d.to_csv('../data/'+ 'NN_best_model_no_overfit_' + activation_function +  '_train_' + str(train_size) + \
-         '_NREP_10_data' + '.csv')
+d.to_csv('../data/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '.csv')
 
 
 

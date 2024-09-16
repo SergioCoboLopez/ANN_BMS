@@ -23,9 +23,9 @@ from sklearn.metrics import mean_absolute_error
 
 #Read data
 #-----------------------------------------------------
-function='tanh'
+function='leaky_ReLU'
 sigma=0.2
-realization=0
+realization=2
 
 
 #filename='NN_' + function + '_sigma_' + str(sigma) + '.csv'

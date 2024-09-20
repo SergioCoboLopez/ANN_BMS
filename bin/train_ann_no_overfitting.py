@@ -23,8 +23,8 @@ from sklearn.metrics import mean_absolute_error
 
 #Read data
 #-----------------------------------------------------
-function='leaky_ReLU'
-sigma=0.16
+function='tanh'
+sigma=0.12
 realization=0
 
 

@@ -24,8 +24,8 @@ from sklearn.metrics import mean_absolute_error
 #Read data
 #-----------------------------------------------------
 function='leaky_ReLU'
-sigma=0.2
-realization=2
+sigma=0.16
+realization=0
 
 
 #filename='NN_' + function + '_sigma_' + str(sigma) + '.csv'
@@ -56,7 +56,6 @@ train_border=d[d['rep']==0].loc[train_size-1]['x1']
 valid_border=d[d['rep']==0].loc[validation_size-1]['x1']
 n_functions=int(d['rep'].max()) #Number of functions in dataset
 iterations=300
-
 
 
 for n in range(n_functions + 1):
@@ -164,7 +163,7 @@ for n in range(n_functions + 1):
     plt.title('%s, n=%d' % (function, n),fontsize=size_title)
     ext=extensions[0]
     plt.savefig(output_path+name_fig+ext,dpi=300)
-    plt.show()
+ #   plt.show()
     
     #First NN found
     net_first=nn_dict[0]
@@ -228,7 +227,7 @@ for n in range(n_functions + 1):
     plt.xlim(-2,2);plt.ylim(-0.1,1.1)
     plt.legend(loc='best', fontsize=size_ticks)
     plt.savefig(output_path+name_fig+ext,dpi=300)
-    plt.show()
+#    plt.show()
 
     try:
         ymodel=np.append(ymodel,ymodel_best)

@@ -17,4 +17,21 @@ Step 2 - Add gaussian noise to data.
 
 Take the data generated in the previous step and add gaussian noise with $$\sigma=[0, 0.2]$$ in steps of $$\Delta \sigma = 0.02$$ (future versions might have different intervals).
 
-The code: add_noise_to_data.ipynb. The inputs are the '.csv' files generated in the previous step. The outputs are modified '.csv' files with an additional column representing the gaussian noise. There are as many outputs as noise realizations. In the current version of this repository, there are three realizations.  
+The code: add_noise_to_data.ipynb. The inputs are the '.csv' files generated in the previous step. The outputs are modified '.csv' files with an additional column representing the gaussian noise. There are as many outputs as noise realizations. In the current version of this repository, there are three realizations.
+
+Step 3 - Train and test artificial ANNs
+
+The code: train_ann_no_overfitting.py
+
+More information soon
+
+
+Step 4 - Compare results for a single realization
+
+The code: BMS_energy_mdl.ipynb
+
+More information soon
+
+Step 5 - Compare overall results
+
+To be developed

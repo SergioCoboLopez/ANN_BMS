@@ -11,7 +11,7 @@ Step 1 - Generate 20 one-dimensional functions using Neural Networks with the fo
 
 The functions are normalized ($$y=[0,1]$$) and data range from $$x=[-4,4]$$. We take the subset $$x_1=[-2,2]$$.
 
-The code: 'generate_ANN_data.ipynb'. This code genrates the benchmark data to compare ANNs and the BMS and is meant to be used a single time. The code has no input. The outputs are 'csv' files labeled: NN_function_<function>_NREP_10_data.csv, with <function> being $$\textit{tanh}$$, $$\textit{leaky ReLU}$$ or any other function that the user would like to implement. Each 'csv' file has three columns containing the 10 functions for each activation function: $$x_1$$, $yy$$ and $$rep$$, the latter column representing the number of functions.
+The code: 'generate_ANN_data.ipynb'. This code genrates the benchmark data to compare ANNs and the BMS and is meant to be used a single time. The code has no input. The outputs are 'csv' files labeled: NN_function_<function>_NREP_10_data.csv, with "<function>" being $$\textit{tanh}$$, $$\textit{leaky ReLU}$$ or any other function that the user would like to implement. Each 'csv' file has three columns containing the 10 functions for each activation function: $$x_1$$, $yy$$ and $$rep$$, the latter column representing the number of functions.
 
 Step 2 - Add gaussian noise to data.
 

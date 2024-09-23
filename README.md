@@ -1,1 +1,1 @@
-# BMS_ANN
+# Bayesian Machine Scientist vs Artificial Neural Netkorks

@@ -4,10 +4,10 @@
 
 Step 1 - Generate 20 functions using Neural Networks with the following architecture:
 
-   1.1. Input Layer Size: 1
-   1.2. Number of layers: 5
-   1.3. Layer size: 10
-   1.4. Activation functions: hyperbolic tangent (10 functions) and Leaky ReLU (10 functions)
+   1. Input Layer Size: 1
+   1. Number of layers: 5
+   1. Layer size: 10
+   1. Activation functions: hyperbolic tangent (10 functions) and Leaky ReLU (10 functions)
 
 The functions are normalized ($$y=[0,1]$$) and data range from $$x=[-4,4]$$. We take the subset $$x_1=[-2,2]$$.
 

@@ -3,6 +3,7 @@
 ## Can a Bayesian Machine Scientist beat Artificial Neural Networks?
 
 Step 1 - Generate 20 functions using Neural Networks with the following architecture:
+
    1.1. Input Layer Size: 1
    1.2. Number of layers: 5
    1.3. Layer size: 10

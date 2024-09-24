@@ -34,6 +34,6 @@ The code: BMS_energy_mdl.ipynb
 
 More information soon
 
-Step 5 - Compare overall results
+### Compare overall results
 
 To be developed

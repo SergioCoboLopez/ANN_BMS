@@ -25,7 +25,10 @@ The code: add_noise_to_data.ipynb. The inputs are the '.csv' files generated in 
 
 The code: train_ann_no_overfitting.py
 
-We use the Levenberg-Marquadt [algorithm](https://pyrenn.readthedocs.io/en/latest/train.html) from [pyrenn](https://pyrenn.readthedocs.io/en/latest/index.html) to train neural networks
+We use the Levenberg-Marquadt [algorithm](https://pyrenn.readthedocs.io/en/latest/train.html) from [pyrenn](https://pyrenn.readthedocs.io/en/latest/index.html) to train neural networks.
+We split each function into three sets: a train set (first 50 points), validation (10 points), and test set (20 points).
+We train each neural network with two iterations of the train_LM function in pyrenn. We repeat this training 300 times (epochs), where the input for each epoch is the output of the previous one.
+We track the root squared mean error of each neural network on the validation set over the 300 epochs and save the neural network with the lowest error on the validation test to prevent overfitting.
 
 
 ### Compare results for a single realization
@@ -36,4 +39,6 @@ More information soon
 
 ### Compare overall results
 
-To be developed
+The codes: BMS_vs_ANNs.ipynb and plot_BMS_vs_ANNs.ipynb
+
+Because the operations to generate overall results are time and computationally consuming, we do the data processing on one code and the figure plotting on another one.

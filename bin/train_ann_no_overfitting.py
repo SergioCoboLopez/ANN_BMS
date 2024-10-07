@@ -25,9 +25,7 @@ from sklearn.metrics import mean_absolute_error
 #-----------------------------------------------------
 function='tanh'
 sigma=0.04
-realization=1
-
-#filename='NN_' + function + '_sigma_' + str(sigma) + '.csv'
+realization=2
 
 filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '.csv'
 if sigma==0.10:
@@ -193,7 +191,7 @@ for n in range(n_functions + 1):
     #------------------------------------------------------
 
     #Save neural network
-    pyrenn.saveNN(net_best, '../data/' + 'NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) + '_rep_' + str(n) + '_r_' + str(realization) + '.csv')
+    pyrenn.saveNN(net_best, '../data/trained_nns/' + 'NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) + '_rep_' + str(n) + '_r_' + str(realization) + '.csv')
 
     
 
@@ -244,7 +242,7 @@ d['ymodel']=ymodel
 #Save updated data with model
 
 
-d.to_csv('../data/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '.csv')
+d.to_csv('../data/trained_nns/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '.csv')
 
 
 

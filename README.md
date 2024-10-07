@@ -25,7 +25,7 @@ The code: add_noise_to_data.ipynb. The inputs are the '.csv' files generated in 
 
 The code: train_ann_no_overfitting.py
 
-More information soon
+We use the Levenberg-Marquadt [algorithm](https://pyrenn.readthedocs.io/en/latest/train.html) from [pyrenn](https://pyrenn.readthedocs.io/en/latest/index.html) to train neural networks
 
 
 ### Compare results for a single realization

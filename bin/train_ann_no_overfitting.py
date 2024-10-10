@@ -24,8 +24,8 @@ from sklearn.metrics import mean_absolute_error
 #Read data
 #-----------------------------------------------------
 function='leaky_ReLU'
-sigma=0.04
-realization=0
+sigma=0.0
+realization=2
 
 filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '.csv'
 if sigma==0.10:

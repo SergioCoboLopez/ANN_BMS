@@ -42,3 +42,8 @@ More information soon
 The codes: BMS_vs_ANNs.ipynb and plot_BMS_vs_ANNs.ipynb
 
 Because the operations to generate overall results are time and computationally consuming, we do the data processing on one code and the figure plotting on another one.
+
+##Computing the sem of errors of overall calculations
+For a given value of $$\sigma=\sigma_i$$ w ran 30 simulations for the tanh activation function and 30 simulations for the leaky ReLu activation function. The 30 simulations correspond to $$N=10$$ functions and $$R=3$$ noise realizations.
+We plotted the mean of these 30 simulations.
+As for the error, we calculated the standard error of the mean over the average of the three realizations of the noise.

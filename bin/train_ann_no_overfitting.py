@@ -240,8 +240,6 @@ for n in range(n_functions + 1):
 d['ymodel']=ymodel
 
 #Save updated data with model
-
-
 d.to_csv('../data/trained_nns/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '.csv')
 
 

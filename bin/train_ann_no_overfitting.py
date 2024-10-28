@@ -40,9 +40,6 @@ d=d.drop(columns='Unnamed: 0')
 #Take subset of data
 d=d[(d['x1'] >= -2.0) & (d['x1']<=2.0)]
 d=d.reset_index(drop=True)
-
-#Take nth dataset
-#print(d[d['rep']==0])
 #-----------------------------------------------------
 
 #Build ANN
@@ -149,11 +146,9 @@ for n in range(n_functions + 1):
     line_w=1;marker_s=3
     #--------------------------------
     plt.plot(MAE, '.', markersize=6, color='blue', label='MAE validation')
-#    plt.plot(MSE,'.',markersize=8,color='red',label='MSE validation')
     plt.plot(RMSE,'.',markersize=6,color='green',label='RMSE validation')
 
     plt.plot(MAE_t, linewidth=1,linestyle='--',color='blue',label='MAE train')
-#    plt.plot(MSE_t,linewidth=1,linestyle='--',color='r',label='MSE train')
     plt.plot(RMSE_t,linewidth=1,linestyle='--',color='green',label='RMSE train')
     plt.scatter(min_err_rmse_ind,min_error_rmse,s=80,marker='*',color='red',label='minimum rmse')
     #--------------------------------------------------------
@@ -164,7 +159,6 @@ for n in range(n_functions + 1):
     plt.title('%s, n=%d' % (function, n),fontsize=size_title)
     ext=extensions[0]
     plt.savefig(output_path+name_fig+ext,dpi=300)
- #   plt.show()
     
     #First NN found
     net_first=nn_dict[0]
@@ -227,8 +221,8 @@ for n in range(n_functions + 1):
     plt.xticks(fontsize=size_ticks);plt.yticks(fontsize=size_ticks)
     plt.xlim(-2,2);plt.ylim(-0.1,1.1)
     plt.legend(loc='best', fontsize=size_ticks)
+    
     plt.savefig(output_path+name_fig+ext,dpi=300)
-#    plt.show()
 
     try:
         ymodel=np.append(ymodel,ymodel_best)

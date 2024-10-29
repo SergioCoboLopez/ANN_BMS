@@ -1,5 +1,0 @@
-site_name: BMS vs ANNs
-nav:
-  - Home: index.md
-  - About: about.md
-theme: readthedocs

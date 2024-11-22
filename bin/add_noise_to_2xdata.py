@@ -31,13 +31,6 @@ for sigma in sigmas:
         print(sigma, r)
         noise = np.random.normal(mean,sigma,sample)    
         
-        # noise='../data/' + file_noise
-        # n=pd.read_csv(noise)
-        # n=n.drop(columns='Unnamed: 0')
-        # print(n)
-
-        #noise column to list (might be useful for 0.5x points
-#        noise=n['noise'].tolist()
 
         #Add noise to high resolution data
         d['noise']=noise

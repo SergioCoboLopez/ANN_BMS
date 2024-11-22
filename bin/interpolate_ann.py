@@ -31,8 +31,6 @@ file_name_nn='NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) +\
 file_name_nn='../data/trained_nns/' + file_name_nn
 
 nn=pyrenn.loadNN(file_name_nn)
-
-#print(nn)
 #----------------------------------
 
 #predictions of nn
@@ -41,6 +39,12 @@ train_border_row=dn[(dn['x1']<=1.0) & (dn['x1']>=0.99)]
 train_size=train_border_row.index[0]
 
 print(train_border_row.index[0])
+
+x_tot=dn['x1']
+
+ytest=pyrenn.NNOut(x_tot, nn)
+
+print(ytest)
 
 
 

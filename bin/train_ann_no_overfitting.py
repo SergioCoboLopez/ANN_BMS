@@ -14,6 +14,7 @@ import pickle
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
+import sys
 import seaborn as sns
 import matplotlib.gridspec as gridspec
 from sklearn.metrics import mean_squared_error
@@ -24,14 +25,43 @@ from sklearn.metrics import mean_absolute_error
 #Read data
 #-----------------------------------------------------
 function='leaky_ReLU'
-sigma=0.0
-realization=2
+sigma=0.04
 
-filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '.csv'
-if sigma==0.10:
-    filename='NN_' + function + '_sigma_' + '0.10' + '_r_' +str(realization) + '.csv'
+#realization=0
+#sigma=int(sys.argv[1])
+realization=int(sys.argv[1])
+
+resolution='0.5x'
+
+
+if resolution=='1x':
+    filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '.csv'
+    if sigma==0.10:
+        filename='NN_' + function + '_sigma_' + '0.10' + '_r_' +str(realization) + '.csv'
+        
+    data='../data/' + filename
+    train_size=50;validation_size=train_size + 10
+    output_path='../data/trained_nns/'
     
-data='../data/' + filename
+elif resolution=='2x':
+    filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '_res_0.025.csv'
+    # if sigma==0.10:
+    #      filename='NN_' + function + '_sigma_' + '0.10' + '_r_'+str(realization)+'_res_0.025.csv'
+    
+    data='../data/2x_resolution/' + filename
+    train_size=100;validation_size=train_size + 20
+    output_path='../data/2x_resolution/trained_nns/'
+    
+elif resolution=='0.5x':
+    filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '_res_0.1.csv'
+    data='../data/0.5x_resolution/trained_nns/' + filename
+
+    if sigma==0.10:
+        filename='NN_' + function + '_sigma_' + '0.10' + '_r_' +str(realization) + '_res_0.1.csv'
+
+    data='../data/0.5x_resolution/' + filename
+    train_size=25;validation_size=train_size + 5
+    output_path='../data/0.5x_resolution/trained_nns/'
 
 
 d=pd.read_csv(data)
@@ -49,7 +79,6 @@ arch=[ILS] + NL*[LS] + [OLS]
 nn=pyrenn.CreateNN(arch)
 
 #Cross validations
-train_size=50;validation_size=train_size + 10
 train_border=d[d['rep']==0].loc[train_size-1]['x1']
 valid_border=d[d['rep']==0].loc[validation_size-1]['x1']
 n_functions=int(d['rep'].max()) #Number of functions in dataset
@@ -130,7 +159,7 @@ for n in range(n_functions + 1):
 
     #Figure settings
     #--------------------------------
-    output_path='../results/nn_w_validation/'
+    output_path_fig='../results/nn_w_validation/'
 
     
     name_fig='validation_errors_' + 'sigma_' + str(sigma) + '_' + str(function) + '_' + str(n) + '_r_' + str(realization)
@@ -158,7 +187,7 @@ for n in range(n_functions + 1):
     plt.xlabel('iterations',fontsize=size_axis);plt.ylabel('error',fontsize=size_axis)
     plt.title('%s, n=%d' % (function, n),fontsize=size_title)
     ext=extensions[0]
-    plt.savefig(output_path+name_fig+ext,dpi=300)
+    plt.savefig(output_path_fig+name_fig+ext,dpi=300)
     
     #First NN found
     net_first=nn_dict[0]
@@ -185,7 +214,8 @@ for n in range(n_functions + 1):
     #------------------------------------------------------
 
     #Save neural network
-    pyrenn.saveNN(net_best, '../data/trained_nns/' + 'NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) + '_rep_' + str(n) + '_r_' + str(realization) + '.csv')
+#    output_path='../data/trained_nns/'
+    pyrenn.saveNN(net_best, output_path + 'NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) + '_rep_' + str(n) + '_r_' + str(realization) + '.csv')
 
     
 
@@ -234,4 +264,4 @@ for n in range(n_functions + 1):
 d['ymodel']=ymodel
 
 #Save updated data with model
-d.to_csv('../data/trained_nns/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '.csv')
+d.to_csv( output_path + 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '.csv')

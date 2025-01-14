@@ -2,20 +2,30 @@ import pyrenn
 import numpy as np
 import copy
 import pandas as pd
+import sys
 
 
-function='leaky_ReLU'
-n=6
-sigma=0.0
-realization=2
+#CAUTION!! You need to activate a virtual environment to run this code. In your terminal type:
+#source ~/entorno/bin/activate. If you don't have a virtual environment in your computer, create
+#one with numpy 1.20 and pandas 1.2.5 so that pyrenn can work without conflicting with numpy
+#To deactivate the virtual environment type "deactivate"
+
+
+function='leaky_ReLU' #tanh, leaky_ReLU
+
+realization=sys.argv[1]
+sigma=sys.argv[2]
+
 resolution=0.01
 
 #Read high res data
 #----------------------------------
-file_name_d='NN_function_tanh_NREP_10_res_' + str(resolution) + '_data.csv'
+file_name_d='NN_function_' + function + '_NREP_10_res_' + str(resolution) + '_data.csv'
 file_name_d='../data/generative_data/' + file_name_d
 d=pd.read_csv(file_name_d)
 d=d.drop(columns='Unnamed: 0')
+d=d[(d['x1'] >= -2.0) & (d['x1']<=2.0)]
+d=d.reset_index(drop=True)
 
 n_functions=int(d['rep'].max()) #Number of functions in dataset
 
@@ -36,31 +46,18 @@ for n in range(n_functions + 1):
     #----------------------------------
 
     #predictions of nn
-    # train_value=1.0
-    # train_border_row=dn[(dn['x1']<=1.0) & (dn['x1']>=0.99)]
-    # train_size=train_border_row.index[0]
-
-    # print(train_border_row.index[0])
 
     x_tot=dn['x1']
-
-    #change names here
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    #Save results
+    #----------------------------------
     ymodel=pyrenn.NNOut(x_tot, nn)
-
     try:
-        ymodel=np.append(ymodel,ymodel_best)
+        ymodels_all=np.append(ymodels_all,ymodel)
     except NameError:
-        ymodel=ymodel_best
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ymodels_all=ymodel
+    #----------------------------------
 
 #Save updated data with model
-d['ymodel']=ymodel
-d.to_csv('../data/inter_extrapolate_nns/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '.csv')
-
-print(ytest)
-
-
-
-
-
+d['ymodel']=ymodels_all
+d.to_csv('../data/inter_extrapolate_nns/'+ 'NN_no_overfit_' + function + '_sigma_' + str(sigma) + '_r_' + str(realization) + '_res_0.01.csv')

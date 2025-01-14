@@ -1,0 +1,135 @@
+#28/11/2024. 
+
+#Import libraries                                                                                  
+#++++++++++++++++++++++++++++++++++++++++++++                                                      
+import seaborn as sns
+import numpy as np
+import scipy
+from scipy.integrate import odeint
+import matplotlib.gridspec as gridspec
+import matplotlib
+import matplotlib.pyplot as plt
+from decimal import Decimal
+import math
+from scipy.integrate import solve_ivp
+import pandas as pd
+from matplotlib.pyplot import figure
+import copy
+import sys
+from matplotlib import colormaps
+#++++++++++++++++++++++++++++++++++++++++++++ 
+
+#----------------------------
+def nguyen1(x):
+    y1=3.39*x**3 + 2.12*x**2 +1.78*x
+    return y1
+#----------------------------
+
+#----------------------------
+def nguyen2(x):
+    y2=np.sin(x**2)*np.cos(x) - 0.75
+    return y2
+#----------------------------
+
+#----------------------------
+def nguyen3(x):
+    y3=np.log(x+1.4) + np.log(x**2 + 1.3)
+    return y3
+#----------------------------
+
+#---------------------------
+def nguyen4(x):
+    y4=np.sqrt(1.23*x)
+    return y4
+#----------------------------
+
+#---------------------------
+def nguyen5(x,y):
+    y5=np.sin(1.5*x)*np.cos(0.5*y)
+    return y5
+#----------------------------
+
+
+step=0.05
+
+x1 = np.arange(-4, 4, step)
+x2 = np.arange(0, 8, step)
+y1 = np.arange(-4, 4, step)
+
+z1 = [ nguyen1(x) for x in x1]
+z2 = [ nguyen2(x) for x in x1]
+z3 = [ nguyen3(x) for x in x2]
+z4 = [ nguyen4(x) for x in x2]
+z5 = [ nguyen5(x,y) for (x,y) in zip(x1,y1)]
+
+print(z5)
+
+#Define figure size in cm
+#--------------------------------
+cm = 1/2.54 #convert inch to cm
+width = 8*cm; height=4*cm
+
+#Fonts and sizes                                                     
+size_axis=7;size_ticks=6;size_title=5
+line_w=1;marker_s=3
+#--------------------------------
+
+#Plots                                                               
+#--------------------------------
+
+
+#Figure Size
+cm = 1/2.54  # centimeters in inches 
+width=24*cm;height=12*cm #Width and height of plots 
+matplotlib.rcParams['figure.figsize'] = [width, height]
+rows=2;cols=4
+#Fonts and sizes                                                     
+size_axis=7;size_ticks=6;size_title=7
+
+gs=gridspec.GridSpec(rows,cols)
+gs.update(left=0.05,right=0.97,bottom=0.1,top=0.95,wspace=0.25,hspace=0.65)
+
+#Nguyen1
+ax_00=plt.subplot(gs[0,0])
+plt.title(r'$y_1=3.39 x^3 + 2.12 x^2 +1.78x$',fontsize=size_title)
+plt.plot(x1,z1, '.', color='blue', label='f1')
+plt.xlabel('x',fontsize=size_axis)
+plt.ylabel('y',fontsize=size_axis)
+#ax_00.vlines(x=medians.rmse_mdl_train[0], ymin=0, ymax=6, color='k',linestyle='--')
+
+
+#Nguyen1
+ax_01=plt.subplot(gs[0,1])
+plt.title(r'$y_2=\sin(x^2) \cos(x)$',fontsize=size_title)
+plt.plot(x1,z2, '.', color='blue', label='f1')
+plt.xlabel('x',fontsize=size_axis)
+plt.ylabel('y',fontsize=size_axis)
+
+
+#Nguyen1
+ax_02=plt.subplot(gs[0,2])
+plt.title("Nguyen 3",fontsize=size_title)
+plt.plot(x2,z3, '.', color='blue', label='f1')
+plt.xlabel('x',fontsize=size_axis)
+plt.ylabel('y',fontsize=size_axis)
+
+
+#Nguyen4
+ax_03=plt.subplot(gs[1,0])
+plt.title("Nguyen 4",fontsize=size_title)
+plt.plot(x2,z4, '.', color='blue', label='f1')
+plt.xlabel('x',fontsize=size_axis)
+plt.ylabel('y',fontsize=size_axis)
+
+
+#Nguyen5
+ax_04 = plt.subplot(gs[1:3,1], projection='3d')
+plt.title("Nguyen 5",fontsize=size_title)
+ax_04.plot(x1, y1, z5, '.',color='blue', label='test')
+ax_04.set_xlabel('x',fontsize=size_axis)
+ax_04.set_ylabel('y',fontsize=size_axis)
+ax_04.set_zlabel('z',fontsize=size_axis)
+
+
+plt.savefig('../../results/' + 'nguyen_functions.pdf',dpi=300)
+plt.show()

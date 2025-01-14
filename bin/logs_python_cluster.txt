@@ -1,0 +1,15 @@
+Matplotlib created a temporary cache directory at /tmp/matplotlib-fjrj71ya because the default path (/home/scobol/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib created a temporary cache directory at /tmp/matplotlib-rxsba98w because the default path (/home/scobol/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib created a temporary cache directory at /tmp/matplotlib-39axjasc because the default path (/home/scobol/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Traceback (most recent call last):
+  File "/export/home/shared/Projects/ANN/Sergio/ANN_BMS/bin/train_ann_no_overfitting.py", line 17, in <module>
+    import seaborn as sns
+ModuleNotFoundError: No module named 'seaborn'
+Traceback (most recent call last):
+  File "/export/home/shared/Projects/ANN/Sergio/ANN_BMS/bin/train_ann_no_overfitting.py", line 17, in <module>
+    import seaborn as sns
+ModuleNotFoundError: No module named 'seaborn'
+Traceback (most recent call last):
+  File "/export/home/shared/Projects/ANN/Sergio/ANN_BMS/bin/train_ann_no_overfitting.py", line 17, in <module>
+    import seaborn as sns
+ModuleNotFoundError: No module named 'seaborn'

@@ -24,24 +24,24 @@ from sklearn.metrics import mean_absolute_error
 
 #Read data
 #-----------------------------------------------------
-function='leaky_ReLU'
+function='tanh'
 sigma=0.04
 
 #realization=0
 #sigma=int(sys.argv[1])
 realization=int(sys.argv[1])
 
-resolution='0.5x'
+resolution='1x'
 
 
 if resolution=='1x':
     filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '.csv'
     if sigma==0.10:
-        filename='NN_' + function + '_sigma_' + '0.10' + '_r_' +str(realization) + '.csv'
+        filename='NN_' + function + '_sigma_' + '0.1' + '_r_' +str(realization) + '.csv'
         
-    data='../data/' + filename
+    data='../data/1x_resolution/' + filename
     train_size=50;validation_size=train_size + 10
-    output_path='../data/trained_nns/'
+    output_path='../data/1x_resolution/trained_nns/'
     
 elif resolution=='2x':
     filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '_res_0.025.csv'
@@ -56,8 +56,8 @@ elif resolution=='0.5x':
     filename='NN_' + function + '_sigma_' + str(sigma) + '_r_' +str(realization) + '_res_0.1.csv'
     data='../data/0.5x_resolution/trained_nns/' + filename
 
-    if sigma==0.10:
-        filename='NN_' + function + '_sigma_' + '0.10' + '_r_' +str(realization) + '_res_0.1.csv'
+    # if sigma==0.10:
+    #     filename='NN_' + function + '_sigma_' + '0.10' + '_r_' +str(realization) + '_res_0.1.csv'
 
     data='../data/0.5x_resolution/' + filename
     train_size=25;validation_size=train_size + 5

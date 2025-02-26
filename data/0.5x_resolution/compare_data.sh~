@@ -1,0 +1,4 @@
+#!bin/bash
+
+sigma="$1"
+resolution="$2"

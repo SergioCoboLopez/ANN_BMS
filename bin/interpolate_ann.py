@@ -40,7 +40,7 @@ for n in range(n_functions + 1):
     file_name_nn='NN_weights_no_overfit_' + function + '_sigma_' + str(sigma) +\
         '_rep_' + str(n) + '_r_' + str(realization) + '.csv'
 
-    file_name_nn='../data/trained_nns/' + file_name_nn
+    file_name_nn='../data/1x_resolution/trained_nns/' + file_name_nn
 
     nn=pyrenn.loadNN(file_name_nn)
     #----------------------------------

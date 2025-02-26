@@ -29,8 +29,7 @@ for sigma in sigmas:
     for r in range(3):
         
         print(sigma, r)
-        noise = np.random.normal(mean,sigma,sample)    
-        
+        noise = np.random.normal(mean,sigma,sample)            
 
         #Add noise to high resolution data
         d['noise']=noise

@@ -25,13 +25,13 @@ from sklearn.metrics import mean_absolute_error
 #Read data
 #-----------------------------------------------------
 function='tanh'
-sigma=0.04
+sigma=0.14
 
 #realization=0
 #sigma=int(sys.argv[1])
 realization=int(sys.argv[1])
 
-resolution='1x'
+resolution='2x'
 
 
 if resolution=='1x':

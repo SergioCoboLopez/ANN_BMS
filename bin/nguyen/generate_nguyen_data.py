@@ -51,7 +51,9 @@ def nguyen4(x,y):
 
 
 #define x,y
-points=80
+points=400 #80, 400 (for interpolation and extrapolation)
+
+#points=400
 
 #f1
 x1_i=-1;x1_f=1; step1 = (x1_f - x1_i)/points
@@ -96,7 +98,10 @@ d_all=pd.concat([d1,d5, d7,d8,d10])
 
 print(d_all)
 
-d_all.to_csv('../../data/generative_data/' + 'nguyen_data_all.csv')
+if points==80:
+    d_all.to_csv('../../data/generative_data/' + 'nguyen_data_all.csv')
+elif points==400:
+    d_all.to_csv('../../data/generative_data/' + 'nguyen_inter_extrapolation_data_all.csv')
 
 
 #Define figure size in cm
@@ -163,5 +168,5 @@ ax_04.set_ylabel('y',fontsize=size_axis)
 ax_04.set_zlabel('z',fontsize=size_axis)
 
 
-plt.savefig('../../results/' + 'nguyen_functions.png',dpi=300)
-#plt.show()
+#plt.savefig('../../results/' + 'nguyen_functions.png',dpi=300)
+plt.show()

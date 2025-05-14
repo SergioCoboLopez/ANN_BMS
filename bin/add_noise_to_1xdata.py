@@ -24,7 +24,7 @@ print(d)
 sample=d.index.stop
 print(d.index.stop)
 
-
+'''
 for sigma in sigmas:
     for r in range(3):
         
@@ -37,3 +37,4 @@ for sigma in sigmas:
         
         #Save data
         d.to_csv('../data/1x_resolution/' + 'NN_' + function + '_sigma_' + str(sigma) + '_r_' + str(r) +  '.csv')
+'''
